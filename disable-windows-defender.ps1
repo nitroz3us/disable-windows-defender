@@ -1,4 +1,4 @@
-﻿# Set-MpPreference command to disable everything, and then adding exception for all drive letters, and disabling all available engines
+﻿# Set-MpPreference command to disable everything, and then adding exception for all drive letters
 67..90|foreach-object{
     $drive = [char]$_
     Add-MpPreference -ExclusionPath "$($drive):\" 
