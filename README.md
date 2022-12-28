@@ -33,3 +33,5 @@ https://soji256.medium.com/how-to-permanently-disable-microsoft-defender-antivir
 https://linuxhint.com/powershell-erroraction/
 
 https://theitbros.com/managing-windows-defender-using-powershell/
+
+https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-delete-all-files-from-nested-folders-and-subfolders/
