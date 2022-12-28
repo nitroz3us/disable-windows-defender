@@ -1,7 +1,7 @@
 # disable-windows-defender
 A powershell script to disable Windows Defender for Malware Analysis purposes.
 ## Problem
-Began researching on how to disable Windows Defender and I never found a one-stop solution.
+Began researching on how to disable Windows Defender and I never found a one-stop solution. Created a script for myself to disable Windows Defenders **based on my needs.** Feel free to edit the script to your own needs.
 ## Solution
 Decided on making a script where the user just run once and it's done.
 ## Note
