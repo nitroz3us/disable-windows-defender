@@ -9,11 +9,11 @@
     ## IMPORTANT!! ##
     #################
 
-    Boot in Safe Mode
-    Disable Windows Update
-    Run powershell as admin
-    Set-ExecutionPolicy RemoteSigned
-    Place script in C:\ and run it
+    1. Boot in Safe Mode
+    2. Disable Windows Update
+    3. Run powershell as admin
+    4. Set-ExecutionPolicy RemoteSigned
+    5. Place script in C:\ and run it
 #>
 
 
