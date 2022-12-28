@@ -8,7 +8,10 @@ Feel free to edit the script to your own needs.
 Decided on making a script where the user just run once and it's done.
 ## Note
 1. Boot in Safe Mode.
-2. Disable Windows Update.
+2. Log in as Administrator, if unavailable, activate it. 
+    ```shell
+    net user administrator /active:yes
+    ```
 3. Run PowerShell as Administrator.
 4. Set Execution Policy to RemoteSigned (give permission).
 
