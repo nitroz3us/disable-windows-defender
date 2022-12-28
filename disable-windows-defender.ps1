@@ -5,33 +5,42 @@
     Add-MpPreference -ExclusionProcess "$($drive):\*" 
 }
 
+# Boot in Safe Mode
+# Disable Windows Update
+# run powershell as admin
+# set-executionpolicy remotesigned
+# place script in C:\ and run it
+
+# Disable UAC
+New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
+
 
 # Disable Windows Defender Tamper Protection
-if($(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection")) {
+if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection")) {
     if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection").Start -eq 0) {
-        Write-Host "[+] Service $svc already disabled"
+        Write-Host "Service $svc already disabled"
     } else {
-        Write-Host "[+] Disable service $svc (Please REBOOT)"
+        Write-Host "Disable service $svc (Please REBOOT)"
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection" -Name Start -Value 0
     }
 } else {
-    Write-Host "[+] Service already disabled"
+    Write-Host "Service already disabled"
 }
 
 # Disable Windows Defender Tamper Protection Source
-if($(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource")) {
+if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource")) {
     if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource").Start -eq 0) {
-        Write-Host "[+] Service $svc already disabled"
+        Write-Host "Service $svc already disabled"
     } else {
-        Write-Host "[+] Disabled service (Please REBOOT)"
+        Write-Host "Disabled service (Please REBOOT)"
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource" -Name Start -Value 0
     }
 } else {
-    Write-Host "[+] Service already disabled"
+    Write-Host "Service already disabled"
 }
 
 # Disable what we can for now
-Write-Host "[+] Disable scanning engines (Set-MpPreference)"
+Write-Host "Disable scanning engines (Set-MpPreference)"
 Set-MpPreference -DisableArchiveScanning 1 -ErrorAction SilentlyContinue
 Set-MpPreference -DisableAutoExclusions 1 -ErrorAction SilentlyContinue
 Set-MpPreference -DisableBehaviorMonitoring 1 -ErrorAction SilentlyContinue
@@ -61,21 +70,23 @@ Set-MpPreference -DisableSshParsing 1 -ErrorAction SilentlyContinue
 Set-MpPreference -DisableTlsParsing 1 -ErrorAction SilentlyContinue
 
 
-Write-Host "[+] Set default actions to NoAction (Set-MpPreference)"
+Write-Host "Set default actions to NoAction (Set-MpPreference)"
 
 Set-MpPreference -LowThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 Set-MpPreference -ModerateThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 
-Write-Host "[+] Delete Windows Defender (files, services, drivers)"
+Write-Host "Delete Windows Defender (files, services, drivers)"
 
 Write-Host ""
 # Delete Windows Defender files
-Remove-Item "C:\ProgramData\Windows\Windows Defender\"
-Remove-Item "C:\ProgramData\Windows\Windows Defender Advanced Threat Protection\"
+Remove-Item "C:\ProgramData\Microsoft\Windows Defender\" -Recurse -Force   
+Remove-Item "C:\Program Files (x86)\Windows Defender\" -Recurse -Force
+Remove-Item "C:\Program Files (Arm)\Windows Defender\" -Recurse -Force
+Remove-Item "C:\Program Files\Windows Defender\" -Recurse -Force 
 
 # Delete Windows Defender drivers
-Remove-Item "C:\Windows\System32\drivers\wd\"
+Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 
 $reboot_required = $false
 
@@ -84,14 +95,14 @@ $service_list = @("WdNisSvc", "WinDefend", "Sense")
 foreach($svc in $service_list) {
     if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
         if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
-            Write-Host "[+] Service $svc already disabled"
+            Write-Host "Service $svc already disabled"
         } else {
-            Write-Host "[+] Disable service $svc (Please REBOOT)"
+            Write-Host "Disable service $svc (Please REBOOT)"
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc" -Name Start -Value 4
             $reboot_required = $true
         }
     } else {
-        Write-Host "[+] Service $svc already deleted"
+        Write-Host "Service $svc already deleted"
     }
 }
 
@@ -99,26 +110,26 @@ $driver_list = @("WdnisDrv", "wdfilter", "wdboot")
 foreach($drv in $driver_list) {
     if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
         if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
-            Write-Host "[+] Driver $drv already disabled"
+            Write-Host "Driver $drv already disabled"
         } else {
-            Write-Host "[+] Disable driver $drv (Please REBOOT)"
+            Write-Host "Disable driver $drv (Please REBOOT)"
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv" -Name Start -Value 4
             $reboot_required = $true
             
         }
     } else {
-        Write-Host "[+] Driver $drv already deleted"
+        Write-Host "Driver $drv already deleted"
     }
 }
 
-Write-Host "[+] Check disabled engines (Get-MpPreference)"
+Write-Host "Check disabled engines (Get-MpPreference)"
 Get-MpPreference | fl disable*
 
 # Check if service running or not
 if($(GET-Service -Name WinDefend).Status -eq "Still Running") {   
-    Write-Host "[+] Windows Defender Service is still running (Please REBOOT)"
+    Write-Host "Windows Defender Service is still running (Please REBOOT)"
     $reboot_required = $true
 } else {
-    Write-Host "[+] Windows Defender Service is not running"
+    Write-Host "Windows Defender Service is not running"
     $reboot_required = $false
 }
