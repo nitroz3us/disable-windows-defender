@@ -15,7 +15,7 @@ if($(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtect
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection" -Name Start -Value 0
     }
 } else {
-    Write-Host "[+] Service already deleted"
+    Write-Host "[+] Service already disabled"
 }
 
 # Disable Windows Defender Tamper Protection Source
@@ -27,7 +27,7 @@ if($(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtect
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource" -Name Start -Value 0
     }
 } else {
-    Write-Host "[+] Service already deleted"
+    Write-Host "[+] Service already disabled"
 }
 
 # Disable what we can for now
