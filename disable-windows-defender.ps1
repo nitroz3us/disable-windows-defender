@@ -8,7 +8,7 @@
     #################
     ## IMPORTANT!! ##
     #################
-    
+
     Boot in Safe Mode
     Disable Windows Update
     Run powershell as admin
@@ -96,18 +96,15 @@ Remove-Item "C:\Program Files\Windows Defender\" -Recurse -Force
 # Delete Windows Defender drivers
 Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 
-$reboot_required = $false
-
 # Delete Windows Defender services and drivers from registry (HKLM)
 $service_list = @("WdNisSvc", "WinDefend", "Sense")
 foreach($svc in $service_list) {
     if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
-        if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
+        if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
             Write-Host "Service $svc already disabled"
         } else {
             Write-Host "Disable service $svc (Please REBOOT)"
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc" -Name Start -Value 4
-            $reboot_required = $true
         }
     } else {
         Write-Host "Service $svc already deleted"
@@ -121,9 +118,7 @@ foreach($drv in $driver_list) {
             Write-Host "Driver $drv already disabled"
         } else {
             Write-Host "Disable driver $drv (Please REBOOT)"
-            Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv" -Name Start -Value 4
-            $reboot_required = $true
-            
+            Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv" -Name Start -Value 4            
         }
     } else {
         Write-Host "Driver $drv already deleted"
@@ -139,8 +134,6 @@ Write-Host "-DisableFtpParsing probably not disabled (bug)"
 # Check if Windows Defender service running or not
 if($(GET-Service -Name WinDefend).Status -eq "Still Running") {   
     Write-Host "Windows Defender Service is still running (Please REBOOT)"
-    $reboot_required = $true
 } else {
     Write-Host "Windows Defender Service is not running"
-    $reboot_required = $false
 }
