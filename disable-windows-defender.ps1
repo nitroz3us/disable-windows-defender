@@ -88,10 +88,12 @@ Write-Host "Delete Windows Defender (files, services, drivers)"
 
 Write-Host ""
 # Delete Windows Defender files
-Remove-Item "C:\ProgramData\Microsoft\Windows Defender\" -Recurse -Force   
-Remove-Item "C:\Program Files (x86)\Windows Defender\" -Recurse -Force
-Remove-Item "C:\Program Files (Arm)\Windows Defender\" -Recurse -Force
-Remove-Item "C:\Program Files\Windows Defender\" -Recurse -Force 
+# If unable to delete, silently continue
+Remove-Item "C:\ProgramData\Microsoft\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue   
+Remove-Item "C:\Program Files (x86)\Windows Defender\" -Recurse -Force  -ErrorAction SilentlyContinue
+Remove-Item "C:\Program Files (Arm)\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item "C:\Program Files\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue
+
 
 # Delete Windows Defender drivers
 Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
