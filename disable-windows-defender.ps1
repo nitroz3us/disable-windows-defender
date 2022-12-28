@@ -4,12 +4,18 @@
     Add-MpPreference -ExclusionPath "$($drive):\" 
     Add-MpPreference -ExclusionProcess "$($drive):\*" 
 }
+<# 
+    #################
+    ## IMPORTANT!! ##
+    #################
+    
+    Boot in Safe Mode
+    Disable Windows Update
+    Run powershell as admin
+    Set-ExecutionPolicy RemoteSigned
+    Place script in C:\ and run it
+#>
 
-# Boot in Safe Mode
-# Disable Windows Update
-# Run powershell as admin
-# Set-ExecutionPolicy RemoteSigned
-# Place script in C:\ and run it
 
 # Disable UAC
 New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
@@ -39,8 +45,8 @@ if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource"
     Write-Host "Service already disabled"
 }
 
-# Disable what we can for now
-Write-Host "Disable scanning engines (Set-MpPreference)"
+# Disable list of engines
+Write-Host "Disable Windows Defender engines (Set-MpPreference)"
 Set-MpPreference -DisableArchiveScanning 1 -ErrorAction SilentlyContinue
 Set-MpPreference -DisableAutoExclusions 1 -ErrorAction SilentlyContinue
 Set-MpPreference -DisableBehaviorMonitoring 1 -ErrorAction SilentlyContinue
@@ -72,6 +78,8 @@ Set-MpPreference -DisableTlsParsing 1 -ErrorAction SilentlyContinue
 
 Write-Host "Set default actions to NoAction (Set-MpPreference)"
 
+# Set default actions to NoAction, so that no alerts are shown, and no actions are taken
+# Allow actions would be better in my opinion
 Set-MpPreference -LowThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 Set-MpPreference -ModerateThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
@@ -90,7 +98,7 @@ Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 
 $reboot_required = $false
 
-# Check and stop Windows Defender Antivirus related from startups, 4 equals disabled
+# Delete Windows Defender services and drivers from registry (HKLM)
 $service_list = @("WdNisSvc", "WinDefend", "Sense")
 foreach($svc in $service_list) {
     if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
@@ -105,7 +113,7 @@ foreach($svc in $service_list) {
         Write-Host "Service $svc already deleted"
     }
 }
-
+# Delete Windows Defender drivers from registry (HKLM)
 $driver_list = @("WdnisDrv", "wdfilter", "wdboot")
 foreach($drv in $driver_list) {
     if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
@@ -122,10 +130,13 @@ foreach($drv in $driver_list) {
     }
 }
 
+# Check list of service running or not
 Write-Host "Check disabled engines (Get-MpPreference)"
 Get-MpPreference | fl disable*
+Write-Host "-DisableFtpParsing probably not disabled (bug)"
 
-# Check if service running or not
+
+# Check if Windows Defender service running or not
 if($(GET-Service -Name WinDefend).Status -eq "Still Running") {   
     Write-Host "Windows Defender Service is still running (Please REBOOT)"
     $reboot_required = $true
