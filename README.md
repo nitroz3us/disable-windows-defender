@@ -21,6 +21,10 @@ Decided on making a script where the user just run once and it's done.
 
 5. Place script in ```C:\``` Drive and run it.
 6. Restart your OS.
+
+<img src="https://github.com/nitroz3us/disable-windows-defender/blob/main/img/win_defendera_stopped.jpeg" width="50%" /> 
+
+
 ## Operating System
 Windows 11
 ## References
