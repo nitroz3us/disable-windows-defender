@@ -1,0 +1,124 @@
+﻿# Set-MpPreference command to disable everything, and then adding exception for all drive letters, and disabling all available engines
+67..90|foreach-object{
+    $drive = [char]$_
+    Add-MpPreference -ExclusionPath "$($drive):\" 
+    Add-MpPreference -ExclusionProcess "$($drive):\*" 
+}
+
+
+# Disable Windows Defender Tamper Protection
+if($(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection")) {
+    if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection").Start -eq 0) {
+        Write-Host "[+] Service $svc already disabled"
+    } else {
+        Write-Host "[+] Disable service $svc (Please REBOOT)"
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection" -Name Start -Value 0
+    }
+} else {
+    Write-Host "[+] Service already deleted"
+}
+
+# Disable Windows Defender Tamper Protection Source
+if($(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource")) {
+    if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource").Start -eq 0) {
+        Write-Host "[+] Service $svc already disabled"
+    } else {
+        Write-Host "[+] Disabled service (Please REBOOT)"
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource" -Name Start -Value 0
+    }
+} else {
+    Write-Host "[+] Service already deleted"
+}
+
+# Disable what we can for now
+Write-Host "[+] Disable scanning engines (Set-MpPreference)"
+Set-MpPreference -DisableArchiveScanning 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableAutoExclusions 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableBehaviorMonitoring 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableBlockAtFirstSeen 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableCatchupFullScan 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableCatchupQuickScan 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableCpuThrottleOnIdleScans 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableDatagramProcessing 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableDnsOverTcpParsing 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableDnsParsing 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableEmailScanning 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableFtpParsing 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableGradualRelease 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableHttpParsing 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableInboundConnectionFiltering 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableIOAVProtection 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableNetworkProtectionPerfTelemetry 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisablePrivacyMode 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableRdpParsing 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableRealtimeMonitoring 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableRemovableDriveScanning 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableRestorePoint 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableScanningMappedNetworkDrivesForFullScan 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableScanningNetworkFiles 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableScriptScanning 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableSshParsing 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableTlsParsing 1 -ErrorAction SilentlyContinue
+
+
+Write-Host "[+] Set default actions to NoAction (Set-MpPreference)"
+
+Set-MpPreference -LowThreatDefaultAction NoAction -ErrorAction SilentlyContinue
+Set-MpPreference -ModerateThreatDefaultAction NoAction -ErrorAction SilentlyContinue
+Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
+
+Write-Host "[+] Delete Windows Defender (files, services, drivers)"
+
+Write-Host ""
+# Delete Windows Defender files
+Remove-Item "C:\ProgramData\Windows\Windows Defender\"
+Remove-Item "C:\ProgramData\Windows\Windows Defender Advanced Threat Protection\"
+
+# Delete Windows Defender drivers
+Remove-Item "C:\Windows\System32\drivers\wd\"
+
+$reboot_required = $false
+
+# Check and stop Windows Defender Antivirus related from startups, 4 equals disabled
+$service_list = @("WdNisSvc", "WinDefend", "Sense")
+foreach($svc in $service_list) {
+    if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
+        if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
+            Write-Host "[+] Service $svc already disabled"
+        } else {
+            Write-Host "[+] Disable service $svc (Please REBOOT)"
+            Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc" -Name Start -Value 4
+            $reboot_required = $true
+        }
+    } else {
+        Write-Host "[+] Service $svc already deleted"
+    }
+}
+
+$driver_list = @("WdnisDrv", "wdfilter", "wdboot")
+foreach($drv in $driver_list) {
+    if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
+        if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
+            Write-Host "[+] Driver $drv already disabled"
+        } else {
+            Write-Host "[+] Disable driver $drv (Please REBOOT)"
+            Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv" -Name Start -Value 4
+            $reboot_required = $true
+            
+        }
+    } else {
+        Write-Host "[+] Driver $drv already deleted"
+    }
+}
+
+Write-Host "[+] Check disabled engines (Get-MpPreference)"
+Get-MpPreference | fl disable*
+
+# Check if service running or not
+if($(GET-Service -Name WinDefend).Status -eq "Still Running") {   
+    Write-Host "[+] Windows Defender Service is still running (Please REBOOT)"
+    $reboot_required = $true
+} else {
+    Write-Host "[+] Windows Defender Service is not running"
+    $reboot_required = $false
+}
