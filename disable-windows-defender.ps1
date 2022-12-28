@@ -7,9 +7,9 @@
 
 # Boot in Safe Mode
 # Disable Windows Update
-# run powershell as admin
-# set-executionpolicy remotesigned
-# place script in C:\ and run it
+# Run powershell as admin
+# Set-ExecutionPolicy RemoteSigned
+# Place script in C:\ and run it
 
 # Disable UAC
 New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
