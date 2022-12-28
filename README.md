@@ -16,6 +16,8 @@ Decided on making a script where the user just run once and it's done.
 
 5. Place script in ```C:\``` Drive and run it.
 6. Restart your OS.
+## Operating System
+Windows 11
 ## References
 https://soji256.medium.com/how-to-permanently-disable-microsoft-defender-antivirus-on-windows-10-fdfdce9b5fb2
 
