@@ -6,7 +6,7 @@ Began researching on how to disable Windows Defender and I never found a one-sto
 Feel free to edit the script to your own needs.
 ## Solution
 Decided on making a script where the user just run once and it's done.
-## Note
+## Windows 11 Instructions
 1. Boot in Safe Mode.
 2. Log in as Administrator, if unavailable, activate it. 
     ```shell
@@ -24,9 +24,26 @@ Decided on making a script where the user just run once and it's done.
 
 <img src="https://github.com/nitroz3us/disable-windows-defender/blob/main/img/win_defendera_stopped.jpeg" width="70%" /> 
 
+## Windows 10 Instructions
+1. Place script in ```C:\```
+2. Run PowerShell as Administrator.
+3. Locate to ```C:\``` drive and Set Execution Policy to RemoteSigned (give permission).
+
+    ```shell
+    Set-ExecutionPolicy RemoteSigned
+    Set-ExecutionPolicy Unrestricted
+    ```
+
+4. Run it.
+
+    ```shell
+    ./disable-windows-defender.ps1
+    ```
+5. Restart your OS.
 
 ## Operating System
 Windows 11
+Windows 10
 ## References
 https://soji256.medium.com/how-to-permanently-disable-microsoft-defender-antivirus-on-windows-10-fdfdce9b5fb2
 
