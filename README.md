@@ -8,6 +8,8 @@ Feel free to edit the script to your own needs.
 Decided on making a script where the user just run once and it's done.
 ## What happens under the hood
 
+## Extra features
+
 ## Windows 11 Instructions
 1. Boot in Safe Mode.
 2. Log in as Administrator, if unavailable, activate it. 
