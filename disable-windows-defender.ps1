@@ -2,7 +2,8 @@
     #################
     ## IMPORTANT!! ##
     #################
-
+    
+    ### ONLY FOR WINDOWS 11 ###
     1. Boot in Safe Mode
     2. Disable Windows Update
     3. Run powershell as admin
@@ -97,8 +98,8 @@ Remove-Item "C:\Program Files\Windows Defender\" -Recurse -Force -ErrorAction Si
 # Delete Windows Defender drivers
 Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 
-# Delete Windows Defender services and drivers from registry (HKLM)
-$service_list = @("WdNisSvc", "WinDefend", "Sense")
+# Delete Windows Defender services from registry (HKLM)
+$service_list = @( "Sense", "WdNisSvc" , "WinDefend")
 foreach($svc in $service_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
         if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
@@ -112,7 +113,7 @@ foreach($svc in $service_list) {
     }
 }
 # Delete Windows Defender drivers from registry (HKLM)
-$driver_list = @("WdnisDrv", "wdfilter", "wdboot")
+$driver_list = @("WdnisDrv", "wdboot", "wdfilter")
 foreach($drv in $driver_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
         if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
