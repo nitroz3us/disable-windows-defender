@@ -11,7 +11,7 @@ Decided on making a script where the user just run once and it's done.
 - [x] Disable UAC
 - [x] Disable Windows Defender Tamper Protection
 - [x] Disable Windows Defender Tamper Protection Source
-- [x] Disable list of engines
+- [x] Disable list of Windows Defender engines
 - [x] Set default actions to NoAction
 - [x] Try to delete Windows Defender Files and Drivers
 - [x] Delete Windows Defender services and drivers from registry
