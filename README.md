@@ -43,6 +43,7 @@ Decided on making a script where the user just run once and it's done.
 
 ## Operating System
 Windows 11
+
 Windows 10
 ## References
 https://soji256.medium.com/how-to-permanently-disable-microsoft-defender-antivirus-on-windows-10-fdfdce9b5fb2
