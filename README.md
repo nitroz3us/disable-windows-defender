@@ -13,10 +13,10 @@ Decided on making a script where the user just run once and it's done.
     net user administrator /active:yes
     ```
 3. Run PowerShell as Administrator.
-4. Set Execution Policy to RemoteSigned (give permission).
+4. Set Execution Policy to Unrestricted (give permission).
 
     ```shell
-    Set-ExecutionPolicy RemoteSigned
+    Set-ExecutionPolicy Unrestricted
     ```
 
 5. Place script in ```C:\``` Drive and run it.
@@ -27,10 +27,9 @@ Decided on making a script where the user just run once and it's done.
 ## Windows 10 Instructions
 1. Place script in ```C:\```
 2. Run PowerShell as Administrator.
-3. Locate to ```C:\``` drive and Set Execution Policy to RemoteSigned (give permission).
+3. Locate to ```C:\``` drive and Set Execution Policy to Unrestricted (give permission).
 
     ```shell
-    Set-ExecutionPolicy RemoteSigned
     Set-ExecutionPolicy Unrestricted
     ```
 
