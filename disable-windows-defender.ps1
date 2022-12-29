@@ -1,10 +1,4 @@
-﻿# Set-MpPreference command to disable everything, and then adding exception for all drive letters
-67..90|foreach-object{
-    $drive = [char]$_
-    Add-MpPreference -ExclusionPath "$($drive):\" 
-    Add-MpPreference -ExclusionProcess "$($drive):\*" 
-}
-<# 
+﻿<# 
     #################
     ## IMPORTANT!! ##
     #################
@@ -16,6 +10,13 @@
     5. Place script in C:\ and run it
 #>
 
+# Adding exception for all drive letters (C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)
+67..90 | foreach-object{
+    $drive_letters = [char]$_
+    Add-MpPreference -ExclusionPath "$($drive_letters):\" -ErrorAction SilentlyContinue
+    Add-MpPreference -ExclusionProcess "$($drive_letters):\*" -ErrorAction SilentlyContinue
+
+}
 
 # Disable UAC
 New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
@@ -77,7 +78,6 @@ Set-MpPreference -DisableTlsParsing 1 -ErrorAction SilentlyContinue
 
 
 Write-Host "Set default actions to NoAction (Set-MpPreference)"
-
 # Set default actions to NoAction, so that no alerts are shown, and no actions are taken
 # Allow actions would be better in my opinion
 Set-MpPreference -LowThreatDefaultAction NoAction -ErrorAction SilentlyContinue
@@ -85,7 +85,6 @@ Set-MpPreference -ModerateThreatDefaultAction NoAction -ErrorAction SilentlyCont
 Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 
 Write-Host "Delete Windows Defender (files, services, drivers)"
-
 Write-Host ""
 # Delete Windows Defender files
 # If unable to delete, silently continue
