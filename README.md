@@ -7,9 +7,18 @@ Feel free to edit the script to your own needs.
 ## Solution
 Decided on making a script where the user just run once and it's done.
 ## What happens under the hood
+- [x] Add exception for all drive letters
+- [x] Disable UAC
+- [x] Disable Windows Defender Tamper Protection
+- [x] Disable Windows Defender Tamper Protection Source
+- [x] Disable list of engines
+- [x] Set default actions to NoAction
+- [x] Try to delete Windows Defender Files and Drivers
+- [x] Delete Windows Defender services and drivers from registry
 
-## Extra features
-
+## Extra features [not done]
+- [ ] Disable Windows Update
+- [ ] Disable Windows License Manager Service
 ## Windows 11 Instructions
 1. Boot in Safe Mode.
 2. Log in as Administrator, if unavailable, activate it. 
