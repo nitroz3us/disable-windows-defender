@@ -100,7 +100,7 @@ Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 # Delete Windows Defender services and drivers from registry (HKLM)
 $service_list = @("WdNisSvc", "WinDefend", "Sense")
 foreach($svc in $service_list) {
-    if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
+    if($("HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
         if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
             Write-Host "Service $svc already disabled"
         } else {
@@ -114,7 +114,7 @@ foreach($svc in $service_list) {
 # Delete Windows Defender drivers from registry (HKLM)
 $driver_list = @("WdnisDrv", "wdfilter", "wdboot")
 foreach($drv in $driver_list) {
-    if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
+    if($("HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
         if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
             Write-Host "Driver $drv already disabled"
         } else {
