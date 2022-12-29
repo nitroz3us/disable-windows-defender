@@ -129,7 +129,9 @@ foreach($drv in $driver_list) {
 # Check list of service running or not
 Write-Host "Check disabled engines (Get-MpPreference)"
 Get-MpPreference | fl disable*
-Write-Host "-DisableFtpParsing probably not disabled (bug)"
+
+Write-Host ""
+Write-Host "Some engines might return False, ignore them"
 
 
 # Check if Windows Defender service running or not
@@ -138,3 +140,6 @@ if($(GET-Service -Name WinDefend).Status -eq "Still Running") {
 } else {
     Write-Host "Windows Defender Service is not running"
 }
+
+Write-Host ""
+Write-Host " [+] Please REBOOT your system to complete the process. Thank you."
