@@ -71,3 +71,5 @@ https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-delete-all-file
 https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/command-line-arguments-microsoft-defender-antivirus?view=o365-worldwide
 
 https://www.sciencedirect.com/topics/computer-science/execution-policy
+
+https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference?view=windowsserver2022-ps
