@@ -21,6 +21,8 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 ## Extra features [not done]
 - [ ] Disable Windows Update
 - [ ] Disable Windows License Manager Service
+- [ ] Remove upon reboot/completion
+
 ## Windows 11 Instructions
 1. Boot in Safe Mode.
 2. Log in as Administrator, if unavailable, activate it. 
