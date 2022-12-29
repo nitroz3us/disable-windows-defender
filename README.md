@@ -22,6 +22,8 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 - [ ] Disable Windows Update
 - [ ] Disable Windows License Manager Service
 - [ ] Remove upon reboot/completion
+- [ ] Be able to elevate to SYSTEM in Windows 11
+
 
 ## Windows 11 Instructions
 1. Boot in Safe Mode.
