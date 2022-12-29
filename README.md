@@ -6,6 +6,8 @@ Began researching on how to disable Windows Defender and I never found a one-sto
 Feel free to edit the script to your own needs.
 ## Solution
 Decided on making a script where the user just run once and it's done.
+
+Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 ## What happens under the hood
 - [x] Add exception for all drive letters
 - [x] Disable UAC
