@@ -24,47 +24,27 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 ## Extra features [not done]
 - [ ] Disable Windows Update
 - [ ] Disable Windows License Manager Service
-- [ ] Remove upon reboot/completion
-- [ ] Elevate to SYSTEM
-    - [ ] If Windows 10: 
-        - [ ] Elevate to SYSTEM
-    - [ ] If Windows 11: 
-        - [ ] Download psexec
-        - [ ] Elevate to SYSTEM
+- [ ] Elevate to NT AUTHORITY\SYSTEM for both Windows 10/11
+    - [ ] Download psexec
+    - [ ] Elevate to NT AUTHORITY\SYSTEM
 
-## Windows 11 Instructions
+## Windows 10/11 Instructions
 1. Boot in Safe Mode.
 2. Log in as Administrator, if unavailable, activate it. 
     ```shell
     net user administrator /active:yes
     ```
 3. Run PowerShell as Administrator.
-4. Set Execution Policy to Unrestricted (give permission).
+4. Set Execution Policy to RemoteSigned (give permission).
 
     ```shell
-    Set-ExecutionPolicy Unrestricted
+    Set-ExecutionPolicy RemoteSigned
     ```
 
 5. Place script in ```C:\``` Drive and run it.
 6. Restart your OS.
 
 <img src="https://github.com/nitroz3us/disable-windows-defender/blob/main/img/win_defendera_stopped.jpeg" width="70%" /> 
-
-## Windows 10 Instructions
-1. Place script in ```C:\```
-2. Run PowerShell as Administrator.
-3. Locate to ```C:\``` drive and Set Execution Policy to Unrestricted (give permission).
-
-    ```shell
-    Set-ExecutionPolicy Unrestricted
-    ```
-
-4. Run it.
-
-    ```shell
-    ./disable-windows-defender.ps1
-    ```
-5. Restart your OS.
 
 ## Operating System
 Windows 11
@@ -84,3 +64,5 @@ https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/comma
 https://www.sciencedirect.com/topics/computer-science/execution-policy
 
 https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference?view=windowsserver2022-ps
+
+https://blog.nirsoft.net/2020/02/25/run-program-as-trustedinstaller/
