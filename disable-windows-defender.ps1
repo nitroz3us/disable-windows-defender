@@ -2,7 +2,7 @@
     #################
     ## IMPORTANT!! ##
     #################
-    
+   
     ### ONLY FOR WINDOWS 11 ###
     1. Boot in Safe Mode
     2. Disable Windows Update
@@ -38,25 +38,25 @@ New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\s
 # Disable Windows Defender Tamper Protection
 if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection")) {
     if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection").Start -eq 0) {
-        Write-Host "Service $svc already disabled"
+        Write-Host "TamperProtection service already disabled"
     } else {
-        Write-Host "Disable service $svc (Please REBOOT)"
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection" -Name Start -Value 0
+        Write-Host "TamperProtection service has been disabled service (Please REBOOT)"
     }
 } else {
-    Write-Host "Service already disabled"
+    Write-Host "TamperProtection ervice already disabled"
 }
 
 # Disable Windows Defender Tamper Protection Source
 if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource")) {
     if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource").Start -eq 0) {
-        Write-Host "Service $svc already disabled"
+        Write-Host "TamperProtectionSource service already disabled"
     } else {
-        Write-Host "Disabled service (Please REBOOT)"
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource" -Name Start -Value 0
+        Write-Host "TamperProtectionSource service has been disabled service (Please REBOOT)"
     }
 } else {
-    Write-Host "Service already disabled"
+    Write-Host "TamperProtectionSource service already disabled"
 }
 
 # Disable list of engines
@@ -99,6 +99,19 @@ Set-MpPreference -LowThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 Set-MpPreference -ModerateThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 
+# Disable Windows Defender
+if($("HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender")) {
+    if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender").DisableAntiSpyware -eq 1) {
+        Write-Host "DisableAntiSpyware service already disabled"
+    } else {
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource" -Name Start -Value 1
+        Write-Host "DisableAntiSpyware service has been disabled service (Please REBOOT)"
+    }
+} else {
+    Write-Host "DisableAntiSpyware service already disabled"
+}
+
+
 Write-Host "Delete Windows Defender (files, services, drivers)"
 Write-Host ""
 # Delete Windows Defender files
@@ -126,6 +139,10 @@ foreach($svc in $service_list) {
         Write-Host "Service $svc already deleted"
     }
 }
+
+
+
+
 # Delete Windows Defender drivers from registry (HKLM)
 $driver_list = @("WdnisDrv", "wdboot", "wdfilter")
 foreach($drv in $driver_list) {
