@@ -30,25 +30,6 @@
 
 }
 
-# $os = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
-# $elevated = $false
-# if ($os -like "*Windows 10*") {
-#     $url = "https://download.sysinternals.com/files/PSTools.zip"
-#     $output = ".\PSTools.zip"
-#     $extractPath = ".\extracted"
-
-#     Invoke-WebRequest -Uri $url -OutFile $output
-#     Expand-Archive -Path $output -DestinationPath $extractPath
-
-#     $psexec = "$extractPath\psexec.exe"
-#     & $psexec -i -s powershell
-#     $elevated = $true
-# }
-# else {
-#     Write-Host "This script is not compatible with this version of Windows." -ForegroundColor Red 
-#     exit
-# }
-
 Write-Host "Checking if user is booted in Safe Mode." -ForegroundColor Yellow
 $bootupState = (Get-WmiObject -Class Win32_ComputerSystem | Select-Object -ExpandProperty BootupState).ToLower()
 $check_boot = $false
@@ -64,20 +45,10 @@ else {
     exit
 }
 
-# if ($elevated) {
-#     Write-Host "Elevated as SYSTEM." -ForegroundColor Green
-# }
-# else {
-#     Write-Host "Not elevated as SYSTEM." -ForegroundColor Yellow 
-#     Write-Host "Will continue as Administrator" -ForegroundColor Yellow 
-# }
-
 # Disable UAC
 New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
 
-
 # Disable list of engines
-## WORK ON THIS FIRST ##
 Write-Host "Disable Windows Defender engines (Set-MpPreference)" -ForegroundColor Yellow 
 Set-MpPreference -DisableBlockAtFirstSeen $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableCatchupFullScan $true -ErrorAction SilentlyContinue
@@ -120,19 +91,19 @@ $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender"
 if (Test-Path $registryPath) {
     if (!(Get-ItemProperty -Path $registryPath -Name "DisableAntiSpyware")) {
         New-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1 -PropertyType DWORD -Force
-        Write-Host "DisableAntiSpyware property has been created."
-        Write-Host "Windows Defender has been disabled."
+        Write-Host "DisableAntiSpyware property has been created." -ForegroundColor Yellow
+        Write-Host "Windows Defender has been disabled." -ForegroundColor Yellow
     }
     elseif ((Get-ItemProperty -Path $registryPath -Name "DisableAntiSpyware").DisableAntiSpyware -eq 1) {
-        Write-Host "Windows Defender is already disabled."
+        Write-Host "Windows Defender is already disabled." -ForegroundColor Yellow
     }else{
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1
-        Write-Host "Windows Defender has been disabled."
+        Write-Host "Windows Defender has been disabled." -ForegroundColor Yellow
  
     }
 }else{
-    Write-Host "Your system does not have the Windows Defender registry key."
-    Write-Host "Windows Defender is already disabled."
+    Write-Host "Your system does not have the Windows Defender registry key." -ForegroundColor Yellow
+    Write-Host "Windows Defender is already disabled." -ForegroundColor Yellow
 }
 
 ### WORK ON THIS ###
@@ -148,36 +119,36 @@ if (Test-Path $registryPath) {
 # Delete Windows Defender drivers - SYSTEM
 # Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 ### WORK ON THIS ###
+d
 
-
-# Delete Windows Defender services from registry (HKLM) - [NEED elevate to SYSTEM]
+# Delete Windows Defender services from registry (HKLM)
 $service_list = @( "WdNisSvc" , "WinDefend")
 foreach($svc in $service_list) {
     if($("
     \$svc")) {
         if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
-            Write-Host "Service $svc already disabled" -ForegroundColor Yellow
+            Write-Host "$svc service has already been deleted" -ForegroundColor Yellow
         } else {
-            Write-Host "Disable service $svc (Please REBOOT)" -ForegroundColor Yellow
+            Write-Host "$svc service has been deleted (Please REBOOT)" -ForegroundColor Yellow
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc" -Name Start -Value 4
         }
     } else {
-        Write-Host "Service $svc already deleted" -ForegroundColor Yellow
+        Write-Host "$svc service has already been deleted" -ForegroundColor Yellow
     }
 }
 
-# Delete Windows Defender drivers from registry (HKLM) - [NEED elevate to SYSTEM]
+# Delete Windows Defender drivers from registry (HKLM)
 $driver_list = @("WdnisDrv", "wdboot", "wdfilter")
 foreach($drv in $driver_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
         if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
-            Write-Host "Driver $drv already disabled" -ForegroundColor Yellow
+            Write-Host "$drv driver has already been disabled" -ForegroundColor Yellow
         } else {
-            Write-Host "Disable driver $drv (Please REBOOT)" -ForegroundColor Yellow
+            Write-Host "$drv driver has been disabled (Please REBOOT)" -ForegroundColor Yellow
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv" -Name Start -Value 4            
         }
     } else {
-        Write-Host "Driver $drv already deleted" -ForegroundColor Yellow
+        Write-Host "$drv driver has already been disabled" -ForegroundColor Yellow
     }
 }
 
@@ -186,8 +157,7 @@ Write-Host "Check disabled engines (Get-MpPreference)" -ForegroundColor Yellow
 Get-MpPreference | fl disable*
 
 Write-Host ""
-Write-Host "Some engines might return False, ignore them" -ForegroundColor Yellow
-
+Write-Host "Some engines might return False, ignore" -ForegroundColor Yellow
 
 # Check if Windows Defender service running or not
 if($(GET-Service -Name WinDefend).Status -eq "Still Running") {   
