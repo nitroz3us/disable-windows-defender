@@ -25,12 +25,9 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 - [ ] Disable Windows Update
 - [ ] Disable Windows License Manager Service
 - [ ] Remove upon reboot/completion
-- [ ] Elevate to SYSTEM
-    - [ ] If Windows 10: 
-        - [ ] Elevate to SYSTEM
-    - [ ] If Windows 11: 
-        - [ ] Download psexec
-        - [ ] Elevate to SYSTEM
+- [ ] Elevate to NT AUTHORITY\SYSTEM for both Windows 10/11
+    - [ ] Download psexec
+    - [ ] Elevate to NT AUTHORITY\SYSTEM
 
 ## Windows 11 Instructions
 1. Boot in Safe Mode.
