@@ -29,6 +29,49 @@
     Add-MpPreference -ExclusionProcess "$($drive_letters):\*" -ErrorAction SilentlyContinue
 
 }
+
+# $os = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
+# $elevated = $false
+# if ($os -like "*Windows 10*") {
+#     $url = "https://download.sysinternals.com/files/PSTools.zip"
+#     $output = ".\PSTools.zip"
+#     $extractPath = ".\extracted"
+
+#     Invoke-WebRequest -Uri $url -OutFile $output
+#     Expand-Archive -Path $output -DestinationPath $extractPath
+
+#     $psexec = "$extractPath\psexec.exe"
+#     & $psexec -i -s powershell
+#     $elevated = $true
+# }
+# else {
+#     Write-Host "This script is not compatible with this version of Windows." -ForegroundColor Red 
+#     exit
+# }
+
+Write-Host "Checking if user is booted in Safe Mode." -ForegroundColor Yellow
+$bootupState = (Get-WmiObject -Class Win32_ComputerSystem | Select-Object -ExpandProperty BootupState).ToLower()
+$check_boot = $false
+# Check if the system is booted in Safe mode
+if ($bootupState -eq "*safe*") {
+    Write-Host "The system is booted in Safe mode." -ForegroundColor Green
+    $check_boot = $true
+}
+else {
+    Write-Host "The system is not booted in Safe mode."
+    Write-Host ""
+    Write-Host "[!] Please boot in Safe mode and try again." -ForegroundColor Yellow
+    exit
+}
+
+# if ($elevated) {
+#     Write-Host "Elevated as SYSTEM." -ForegroundColor Green
+# }
+# else {
+#     Write-Host "Not elevated as SYSTEM." -ForegroundColor Yellow 
+#     Write-Host "Will continue as Administrator" -ForegroundColor Yellow 
+# }
+
 # Disable UAC
 New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
 
@@ -72,6 +115,7 @@ Set-MpPreference -ModerateThreatDefaultAction NoAction -ErrorAction SilentlyCont
 Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 
 # Disable Windows Defender.
+# editing HKLM:\SOFTWARE\Microsoft\Windows Defender\ requires to be SYSTEM
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender"
 if (!($registryPath)) {
     Write-Host "[+] Path does not exist, will be adding to the Registry: " -ForegroundColor Green
@@ -91,8 +135,10 @@ else {
 }
 
 ### WORK ON THIS ###
+# Deleting Windows Defender folders & files requires to be SYSTEM
 # Write-Host "Delete Windows Defender (files, services, drivers)" -ForegroundColor Yellow
 # Write-Host ""
+
 # Delete Windows Defender files
 # Windows 10
 # C:\Program Files\Windows Defender - This folder contains the executables and other files for Windows Defender. - TrustedInstaller
@@ -100,7 +146,6 @@ else {
 
 # Delete Windows Defender drivers - SYSTEM
 # Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
-
 ### WORK ON THIS ###
 
 
