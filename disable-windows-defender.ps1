@@ -53,7 +53,7 @@ Write-Host "Checking if user is booted in Safe Mode." -ForegroundColor Yellow
 $bootupState = (Get-WmiObject -Class Win32_ComputerSystem | Select-Object -ExpandProperty BootupState).ToLower()
 $check_boot = $false
 # Check if the system is booted in Safe mode
-if ($bootupState -eq "*safe*") {
+if ($bootupState -like "*safe*") {
     Write-Host "The system is booted in Safe mode." -ForegroundColor Green
     $check_boot = $true
 }
