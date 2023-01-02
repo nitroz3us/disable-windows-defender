@@ -11,8 +11,6 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 ## What happens under the hood
 - [x] Add exception for all drive letters
 - [x] Disable UAC
-- [x] Disable Windows Defender Tamper Protection
-- [x] Disable Windows Defender Tamper Protection Source
 - [x] Disable list of Windows Defender engines
 - [x] Set default actions to NoAction
 - [x] Try to delete Windows Defender Files and Drivers
