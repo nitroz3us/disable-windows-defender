@@ -60,34 +60,36 @@ if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource"
 }
 
 # Disable list of engines
+## WORK ON THIS FIRST ##
 Write-Host "Disable Windows Defender engines (Set-MpPreference)"
-Set-MpPreference -DisableArchiveScanning 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableAutoExclusions 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableBehaviorMonitoring 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableBlockAtFirstSeen 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableCatchupFullScan 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableCatchupQuickScan 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableCpuThrottleOnIdleScans 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableDatagramProcessing 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableDnsOverTcpParsing 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableDnsParsing 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableEmailScanning 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableFtpParsing 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableGradualRelease 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableHttpParsing 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableInboundConnectionFiltering 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableIOAVProtection 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableNetworkProtectionPerfTelemetry 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisablePrivacyMode 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableRdpParsing 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableRealtimeMonitoring 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableRemovableDriveScanning 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableRestorePoint 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableScanningMappedNetworkDrivesForFullScan 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableScanningNetworkFiles 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableScriptScanning 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableSshParsing 1 -ErrorAction SilentlyContinue
-Set-MpPreference -DisableTlsParsing 1 -ErrorAction SilentlyContinue
+Set-MpPreference -DisableBlockAtFirstSeen $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableCatchupFullScan $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableCatchupQuickScan $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableCpuThrottleOnIdleScans $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableDatagramProcessing $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableDnsOverTcpParsing $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableDnsParsing $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableEmailScanning $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableFtpParsing $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableGradualRelease $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableHttpParsing $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableInboundConnectionFiltering $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableNetworkProtectionPerfTelemetry $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisablePrivacyMode $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableRdpParsing $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableRemovableDriveScanning $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableRestorePoint $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableScanningMappedNetworkDrivesForFullScan $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableScanningNetworkFiles $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableSshParsing $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableTlsParsing $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableArchiveScanning $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableAutoExclusions $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableRealtimeMonitoring $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableBehaviorMonitoring $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableIOAVProtection $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableIntrusionPreventionSystem $true -ErrorAction SilentlyContinue
+Set-MpPreference -DisableScriptScanning $true -ErrorAction SilentlyContinue
 
 
 Write-Host "Set default actions to NoAction (Set-MpPreference)"
