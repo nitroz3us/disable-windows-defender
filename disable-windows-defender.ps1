@@ -117,22 +117,23 @@ Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 # Disable Windows Defender.
 # editing HKLM:\SOFTWARE\Microsoft\Windows Defender\ requires to be SYSTEM
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender"
-if (!($registryPath)) {
-    Write-Host "[+] Path does not exist, will be adding to the Registry: " -ForegroundColor Green
-    New-Item -Path $registryPath -Force
-    New-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1 -PropertyType DWORD -Force
-    Write-Host "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
-}
-else {
+if (Test-Path $registryPath) {
     $disableAntiSpyware = (Get-ItemProperty -Path $registryPath -Name "DisableAntiSpyware").DisableAntiSpyware
+
     if ($disableAntiSpyware -eq 1) {
-        Write-Host "Windows Defender is already disabled." -ForegroundColor Yellow
+        Write-Output "Windows Defender is already disabled."
     }
     else {
         Set-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1
-        Write-Host "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
+        Write-Output "Windows Defender has been disabled."
     }
 }
+else {
+    New-Item -Path $registryPath -Force
+    New-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1 -PropertyType DWORD -Force
+    Write-Output "Windows Defender has been disabled."
+}
+
 
 ### WORK ON THIS ###
 # Deleting Windows Defender folders & files requires to be SYSTEM
