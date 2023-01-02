@@ -35,30 +35,6 @@
 New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
 
 
-# Disable Windows Defender Tamper Protection
-if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection")) {
-    if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection").Start -eq 0) {
-        Write-Host "TamperProtection service already disabled" -ForegroundColor Yellow
-    } else {
-        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection" -Name Start -Value 0
-        Write-Host "TamperProtection service has been disabled service (Please REBOOT)" -ForegroundColor Yellow
-    }
-} else {
-    Write-Host "TamperProtection ervice already disabled" -ForegroundColor Yellow
-}
-
-# Disable Windows Defender Tamper Protection Source
-if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource")) {
-    if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource").Start -eq 0) {
-        Write-Host "TamperProtectionSource service already disabled" -ForegroundColor Yellow
-    } else {
-        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource" -Name Start -Value 0
-        Write-Host "TamperProtectionSource service has been disabled service (Please REBOOT)" -ForegroundColor Yellow
-    }
-} else {
-    Write-Host "TamperProtectionSource service already disabled" -ForegroundColor Yellow
-}
-
 # Disable list of engines
 ## WORK ON THIS FIRST ##
 Write-Host "Disable Windows Defender engines (Set-MpPreference)" -ForegroundColor Yellow 
@@ -70,11 +46,9 @@ Set-MpPreference -DisableDatagramProcessing $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableDnsOverTcpParsing $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableDnsParsing $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableEmailScanning $true -ErrorAction SilentlyContinue
-Set-MpPreference -DisableFtpParsing $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableGradualRelease $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableHttpParsing $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableInboundConnectionFiltering $true -ErrorAction SilentlyContinue
-Set-MpPreference -DisableNetworkProtectionPerfTelemetry $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisablePrivacyMode $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableRdpParsing $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableRemovableDriveScanning $true -ErrorAction SilentlyContinue
@@ -104,34 +78,34 @@ $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender"
 if (!(Test-Path $registryPath)) {
     New-Item -Path $registryPath -Force
     New-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1 -PropertyType DWORD -Force
-    Write-Output "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
+    Write-Host "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
 }
 else {
     $disableAntiSpyware = (Get-ItemProperty -Path $registryPath -Name "DisableAntiSpyware").DisableAntiSpyware
     if ($disableAntiSpyware -eq 1) {
-        Write-Output "Windows Defender is already disabled." -ForegroundColor Yellow
+        Write-Host "Windows Defender is already disabled." -ForegroundColor Yellow
     }
     else {
         Set-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1
-        Write-Output "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
+        Write-Host "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
     }
 }
 
 
-Write-Host "Delete Windows Defender (files, services, drivers)" -ForegroundColor Yellow
-Write-Host ""
+# Write-Host "Delete Windows Defender (files, services, drivers)" -ForegroundColor Yellow
+# Write-Host ""
 # Delete Windows Defender files
 # If unable to delete, silently continue
-Remove-Item "C:\ProgramData\Microsoft\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue   
-Remove-Item "C:\Program Files (x86)\Windows Defender\" -Recurse -Force  -ErrorAction SilentlyContinue
-Remove-Item "C:\Program Files (Arm)\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item "C:\Program Files\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue
+# Remove-Item "C:\ProgramData\Microsoft\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue   
+# Remove-Item "C:\Program Files (x86)\Windows Defender\" -Recurse -Force  -ErrorAction SilentlyContinue
+# Remove-Item "C:\Program Files (Arm)\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue
+# Remove-Item "C:\Program Files\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue
 
 # Delete Windows Defender drivers
 Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 
 # Delete Windows Defender services from registry (HKLM)
-$service_list = @( "Sense", "WdNisSvc" , "WinDefend")
+$service_list = @( "WdNisSvc" , "WinDefend")
 foreach($svc in $service_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
         if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
