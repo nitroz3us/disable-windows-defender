@@ -18,10 +18,8 @@
 
     Windows 10:
     C:\Program Files\Windows Defender - This folder contains the executables and other files for Windows Defender.
-    C:\ProgramData\Microsoft\Windows Defender - This folder contains data and configuration files for Windows Defender.
-    C:\Windows\system32\MpCmdRun.exe - This is the main executable for Windows Defender.
-    C:\Windows\SysWOW64\MpCmdRun.exe - This is a version of the MpCmdRun.exe executable that is used on 64-bit systems.
-    C:\Windows\System32\Windows Defender - This folder contains additional files and resources for Windows Defender.
+    C:\ProgramData\Microsoft\Windows Defender - This folder contains data and configuration files for Windows Defender
+    C:\Windows\System32\drivers\wd\ - This folder contains the Windows Defender driver files.
 #>
 
 # Adding exception for all drive letters (C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)
@@ -75,7 +73,8 @@ Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 
 # Disable Windows Defender.
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender"
-if (!(Test-Path $registryPath)) {
+if (!($registryPath)) {
+    Write-Host "[+] Path does not exist, will be adding to the Registry: " -ForegroundColor Green
     New-Item -Path $registryPath -Force
     New-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1 -PropertyType DWORD -Force
     Write-Host "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
@@ -91,23 +90,25 @@ else {
     }
 }
 
-
+### WORK ON THIS ###
 # Write-Host "Delete Windows Defender (files, services, drivers)" -ForegroundColor Yellow
 # Write-Host ""
 # Delete Windows Defender files
-# If unable to delete, silently continue
-# Remove-Item "C:\ProgramData\Microsoft\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue   
-# Remove-Item "C:\Program Files (x86)\Windows Defender\" -Recurse -Force  -ErrorAction SilentlyContinue
-# Remove-Item "C:\Program Files (Arm)\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue
-# Remove-Item "C:\Program Files\Windows Defender\" -Recurse -Force -ErrorAction SilentlyContinue
+# Windows 10
+# C:\Program Files\Windows Defender - This folder contains the executables and other files for Windows Defender. - TrustedInstaller
+# C:\ProgramData\Microsoft\Windows Defender - This folder contains data and configuration files for Windows Defender. - SYSTEM
 
-# Delete Windows Defender drivers
-Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
+# Delete Windows Defender drivers - SYSTEM
+# Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 
-# Delete Windows Defender services from registry (HKLM)
+### WORK ON THIS ###
+
+
+# Delete Windows Defender services from registry (HKLM) - [NEED elevate to SYSTEM]
 $service_list = @( "WdNisSvc" , "WinDefend")
 foreach($svc in $service_list) {
-    if($("HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
+    if($("
+    \$svc")) {
         if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
             Write-Host "Service $svc already disabled" -ForegroundColor Yellow
         } else {
@@ -119,7 +120,7 @@ foreach($svc in $service_list) {
     }
 }
 
-# Delete Windows Defender drivers from registry (HKLM)
+# Delete Windows Defender drivers from registry (HKLM) - [NEED elevate to SYSTEM]
 $driver_list = @("WdnisDrv", "wdboot", "wdfilter")
 foreach($drv in $driver_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
