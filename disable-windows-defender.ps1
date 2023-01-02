@@ -9,6 +9,19 @@
     3. Run powershell as admin
     4. Set-ExecutionPolicy RemoteSigned
     5. Place script in C:\ and run it
+    
+    Windows 11: 
+    C:\Program Files\Windows Defender - TrustedInstaller
+    C:\ProgramData\Microsoft\Windows Defender - SYSTEM
+    C:\Windows\system32\MpCmdRun.exe - TrustedInstaller
+    C:\Windows\SysWOW64\MpCmdRun.exe - TrustedInstaller
+
+    Windows 10:
+    C:\Program Files\Windows Defender - This folder contains the executables and other files for Windows Defender.
+    C:\ProgramData\Microsoft\Windows Defender - This folder contains data and configuration files for Windows Defender.
+    C:\Windows\system32\MpCmdRun.exe - This is the main executable for Windows Defender.
+    C:\Windows\SysWOW64\MpCmdRun.exe - This is a version of the MpCmdRun.exe executable that is used on 64-bit systems.
+    C:\Windows\System32\Windows Defender - This folder contains additional files and resources for Windows Defender.
 #>
 
 # Adding exception for all drive letters (C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)
@@ -18,7 +31,6 @@
     Add-MpPreference -ExclusionProcess "$($drive_letters):\*" -ErrorAction SilentlyContinue
 
 }
-
 # Disable UAC
 New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
 
