@@ -24,7 +24,6 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 ## Extra features [not done]
 - [ ] Disable Windows Update
 - [ ] Disable Windows License Manager Service
-- [ ] Remove upon reboot/completion
 - [ ] Elevate to NT AUTHORITY\SYSTEM for both Windows 10/11
     - [ ] Download psexec
     - [ ] Elevate to NT AUTHORITY\SYSTEM
