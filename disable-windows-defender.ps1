@@ -38,30 +38,30 @@ New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\s
 # Disable Windows Defender Tamper Protection
 if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection")) {
     if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection").Start -eq 0) {
-        Write-Host "TamperProtection service already disabled"
+        Write-Host "TamperProtection service already disabled" -ForegroundColor Yellow
     } else {
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtection" -Name Start -Value 0
-        Write-Host "TamperProtection service has been disabled service (Please REBOOT)"
+        Write-Host "TamperProtection service has been disabled service (Please REBOOT)" -ForegroundColor Yellow
     }
 } else {
-    Write-Host "TamperProtection ervice already disabled"
+    Write-Host "TamperProtection ervice already disabled" -ForegroundColor Yellow
 }
 
 # Disable Windows Defender Tamper Protection Source
 if($("HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource")) {
     if($(Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource").Start -eq 0) {
-        Write-Host "TamperProtectionSource service already disabled"
+        Write-Host "TamperProtectionSource service already disabled" -ForegroundColor Yellow
     } else {
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features\TamperProtectionSource" -Name Start -Value 0
-        Write-Host "TamperProtectionSource service has been disabled service (Please REBOOT)"
+        Write-Host "TamperProtectionSource service has been disabled service (Please REBOOT)" -ForegroundColor Yellow
     }
 } else {
-    Write-Host "TamperProtectionSource service already disabled"
+    Write-Host "TamperProtectionSource service already disabled" -ForegroundColor Yellow
 }
 
 # Disable list of engines
 ## WORK ON THIS FIRST ##
-Write-Host "Disable Windows Defender engines (Set-MpPreference)"
+Write-Host "Disable Windows Defender engines (Set-MpPreference)" -ForegroundColor Yellow 
 Set-MpPreference -DisableBlockAtFirstSeen $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableCatchupFullScan $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableCatchupQuickScan $true -ErrorAction SilentlyContinue
@@ -92,33 +92,33 @@ Set-MpPreference -DisableIntrusionPreventionSystem $true -ErrorAction SilentlyCo
 Set-MpPreference -DisableScriptScanning $true -ErrorAction SilentlyContinue
 
 
-Write-Host "Set default actions to NoAction (Set-MpPreference)"
+Write-Host "Set default actions to NoAction (Set-MpPreference)" -ForegroundColor Yellow
 # Set default actions to NoAction, so that no alerts are shown, and no actions are taken
 # Allow actions would be better in my opinion
 Set-MpPreference -LowThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 Set-MpPreference -ModerateThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 Set-MpPreference -HighThreatDefaultAction NoAction -ErrorAction SilentlyContinue
 
-# Disable Windows Defender
+# Disable Windows Defender.
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender"
 if (!(Test-Path $registryPath)) {
     New-Item -Path $registryPath -Force
     New-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1 -PropertyType DWORD -Force
-    Write-Output "Windows Defender has been disabled. (PLEASE REBOOT)"
+    Write-Output "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
 }
 else {
     $disableAntiSpyware = (Get-ItemProperty -Path $registryPath -Name "DisableAntiSpyware").DisableAntiSpyware
     if ($disableAntiSpyware -eq 1) {
-        Write-Output "Windows Defender is already disabled."
+        Write-Output "Windows Defender is already disabled." -ForegroundColor Yellow
     }
     else {
         Set-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1
-        Write-Output "Windows Defender has been disabled. (PLEASE REBOOT)"
+        Write-Output "Windows Defender has been disabled. (PLEASE REBOOT)" -ForegroundColor Yellow
     }
 }
 
 
-Write-Host "Delete Windows Defender (files, services, drivers)"
+Write-Host "Delete Windows Defender (files, services, drivers)" -ForegroundColor Yellow
 Write-Host ""
 # Delete Windows Defender files
 # If unable to delete, silently continue
@@ -135,13 +135,13 @@ $service_list = @( "Sense", "WdNisSvc" , "WinDefend")
 foreach($svc in $service_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
         if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
-            Write-Host "Service $svc already disabled"
+            Write-Host "Service $svc already disabled" -ForegroundColor Yellow
         } else {
-            Write-Host "Disable service $svc (Please REBOOT)"
+            Write-Host "Disable service $svc (Please REBOOT)" -ForegroundColor Yellow
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc" -Name Start -Value 4
         }
     } else {
-        Write-Host "Service $svc already deleted"
+        Write-Host "Service $svc already deleted" -ForegroundColor Yellow
     }
 }
 
@@ -150,30 +150,30 @@ $driver_list = @("WdnisDrv", "wdboot", "wdfilter")
 foreach($drv in $driver_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
         if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
-            Write-Host "Driver $drv already disabled"
+            Write-Host "Driver $drv already disabled" -ForegroundColor Yellow
         } else {
-            Write-Host "Disable driver $drv (Please REBOOT)"
+            Write-Host "Disable driver $drv (Please REBOOT)" -ForegroundColor Yellow
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv" -Name Start -Value 4            
         }
     } else {
-        Write-Host "Driver $drv already deleted"
+        Write-Host "Driver $drv already deleted" -ForegroundColor Yellow
     }
 }
 
 # Check list of service running or not
-Write-Host "Check disabled engines (Get-MpPreference)"
+Write-Host "Check disabled engines (Get-MpPreference)" -ForegroundColor Yellow
 Get-MpPreference | fl disable*
 
 Write-Host ""
-Write-Host "Some engines might return False, ignore them"
+Write-Host "Some engines might return False, ignore them" -ForegroundColor Yellow
 
 
 # Check if Windows Defender service running or not
 if($(GET-Service -Name WinDefend).Status -eq "Still Running") {   
-    Write-Host "Windows Defender Service is still running (Please REBOOT)"
+    Write-Host "Windows Defender Service is still running (Please REBOOT)" -ForegroundColor Yellow
 } else {
-    Write-Host "Windows Defender Service is not running"
+    Write-Host "Windows Defender Service is not running" -ForegroundColor Yellow
 }
 
 Write-Host ""
-Write-Host " [+] Please REBOOT your system to complete the process. Thank you."
+Write-Host " [+] Please REBOOT your system to complete the process. Thank you." -ForegroundColor Green
