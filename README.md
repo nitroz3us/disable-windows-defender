@@ -21,6 +21,7 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 - [ ] Delete Windows Defender folders & files
 
 ## Extra features [not done]
+- [ ] Elevate to Administrator
 - [ ] Disable Windows License Manager Service
 - [ ] ~~Elevate to NT AUTHORITY\SYSTEM for both Windows 10/11~~
     - [ ] ~~Download psexec~~
