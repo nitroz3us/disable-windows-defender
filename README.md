@@ -23,8 +23,8 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 ## Extra features [not done]
 - [ ] Disable Windows License Manager Service
 - [ ] ~~Elevate to NT AUTHORITY\SYSTEM for both Windows 10/11~~
-    - ~~[ ] Download psexec~~
-    - ~~[ ] Elevate to NT AUTHORITY\SYSTEM~~
+    - [ ] ~~Download psexec~~
+    - [ ] ~~Elevate to NT AUTHORITY\SYSTEM~~
 
 ## Future projects (?)
 - [ ] Be able to disable Windows Defender without having to boot into Safe Mode
