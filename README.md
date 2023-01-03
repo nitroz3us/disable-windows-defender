@@ -26,6 +26,10 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
     - [ ] Download psexec
     - [ ] Elevate to NT AUTHORITY\SYSTEM
 
+## Future projects (?)
+- [ ] Be able to disable Windows Defender without having to boot into Safe Mode
+
+
 ## Windows 10/11 Instructions
 1. Boot in **Safe Mode** [IMPORTANT!]
 2. Log in as Administrator, if unavailable, activate it. 
