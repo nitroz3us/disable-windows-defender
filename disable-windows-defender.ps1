@@ -28,7 +28,6 @@
     Add-MpPreference -ExclusionPath "$($drive_letters):\" -ErrorAction SilentlyContinue
     Add-MpPreference -ExclusionProcess "$($drive_letters):\*" -ErrorAction SilentlyContinue
 
-}
 
 Write-Host "Checking if user is booted in Safe Mode." -ForegroundColor Yellow
 $bootupState = (Get-WmiObject -Class Win32_ComputerSystem | Select-Object -ExpandProperty BootupState).ToLower()
@@ -76,6 +75,9 @@ Set-MpPreference -DisableBehaviorMonitoring $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableIOAVProtection $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableIntrusionPreventionSystem $true -ErrorAction SilentlyContinue
 Set-MpPreference -DisableScriptScanning $true -ErrorAction SilentlyContinue
+# Set-MpPreference -DisableFtpParing $true -ErrorAction SilentlyContinue
+# Set-MpPreference -DisableNetworkProtectionPerfTelemetry $true -ErrorAction SilentlyContinue
+# Set-MpPreference -DisableSmtpParsing $true -ErrorAction SilentlyContinue
 
 
 Write-Host "Set default actions to NoAction (Set-MpPreference)" -ForegroundColor Yellow
@@ -92,34 +94,34 @@ if (Test-Path $registryPath) {
     if (!(Get-ItemProperty -Path $registryPath -Name "DisableAntiSpyware")) {
         New-ItemProperty -Path $registryPath -Name "DisableAntiSpyware" -Value 1 -PropertyType DWORD -Force
         Write-Host "DisableAntiSpyware property has been created." -ForegroundColor Yellow
-        Write-Host "Windows Defender has been disabled." -ForegroundColor Yellow
+        Write-Host "Windows Defender has been disabled." -ForegroundColor Green
     }
     elseif ((Get-ItemProperty -Path $registryPath -Name "DisableAntiSpyware").DisableAntiSpyware -eq 1) {
-        Write-Host "Windows Defender is already disabled." -ForegroundColor Yellow
+        Write-Host "Windows Defender is already disabled." -ForegroundColor Green
     }else{
         Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1
-        Write-Host "Windows Defender has been disabled." -ForegroundColor Yellow
+        Write-Host "Windows Defender has been disabled." -ForegroundColor Green
  
     }
 }else{
     Write-Host "Your system does not have the Windows Defender registry key." -ForegroundColor Yellow
-    Write-Host "Windows Defender is already disabled." -ForegroundColor Yellow
+    Write-Host "Windows Defender is already disabled." -ForegroundColor Green
 }
 
 ### WORK ON THIS ###
-# Deleting Windows Defender folders & files requires to be SYSTEM
-# Write-Host "Delete Windows Defender (files, services, drivers)" -ForegroundColor Yellow
+Write-Host "Deleting Windows Defender (files, services, drivers)" -ForegroundColor Yellow
 # Write-Host ""
-
-# Delete Windows Defender files
-# Windows 10
-# C:\Program Files\Windows Defender - This folder contains the executables and other files for Windows Defender. - TrustedInstaller
-# C:\ProgramData\Microsoft\Windows Defender - This folder contains data and configuration files for Windows Defender. - SYSTEM
-
-# Delete Windows Defender drivers - SYSTEM
-# Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
-### WORK ON THIS ###
-d
+# Define the paths to the folders to be deleted
+if (Test-Path "C:\Windows\System32\drivers\wd\") {
+    # If the folder exists, output a message indicating that it was not deleted
+    Write-Output "The C:\Windows\System32\drivers\wd\ is not deleted." -ForegroundColor Yellow
+    Write-Output "The C:\Windows\System32\drivers\wd\ will be deleting." -ForegroundColor Yellow
+    Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
+}
+else {
+    # If the folder does not exist, output a message indicating that it was deleted
+    Write-Output "The C:\Windows\System32\drivers\wd\ has already been deleted." -ForegroundColor Green
+}
 
 # Delete Windows Defender services from registry (HKLM)
 $service_list = @( "WdNisSvc" , "WinDefend")
@@ -127,13 +129,13 @@ foreach($svc in $service_list) {
     if($("
     \$svc")) {
         if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
-            Write-Host "$svc service has already been deleted" -ForegroundColor Yellow
+            Write-Host "$svc service has already been deleted" -ForegroundColor Green
         } else {
-            Write-Host "$svc service has been deleted (Please REBOOT)" -ForegroundColor Yellow
+            Write-Host "$svc service has been deleted (Please REBOOT)" -ForegroundColor Green
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc" -Name Start -Value 4
         }
     } else {
-        Write-Host "$svc service has already been deleted" -ForegroundColor Yellow
+        Write-Host "$svc service has already been deleted" -ForegroundColor Green
     }
 }
 
@@ -142,13 +144,13 @@ $driver_list = @("WdnisDrv", "wdboot", "wdfilter")
 foreach($drv in $driver_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
         if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
-            Write-Host "$drv driver has already been disabled" -ForegroundColor Yellow
+            Write-Host "$drv driver has already been disabled" -ForegroundColor Green
         } else {
-            Write-Host "$drv driver has been disabled (Please REBOOT)" -ForegroundColor Yellow
+            Write-Host "$drv driver has been disabled (Please REBOOT)" -ForegroundColor Green
             Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv" -Name Start -Value 4            
         }
     } else {
-        Write-Host "$drv driver has already been disabled" -ForegroundColor Yellow
+        Write-Host "$drv driver has already been disabled" -ForegroundColor Green
     }
 }
 
@@ -163,7 +165,7 @@ Write-Host "Some engines might return False, ignore" -ForegroundColor Yellow
 if($(GET-Service -Name WinDefend).Status -eq "Still Running") {   
     Write-Host "Windows Defender Service is still running (Please REBOOT)" -ForegroundColor Yellow
 } else {
-    Write-Host "Windows Defender Service is not running" -ForegroundColor Yellow
+    Write-Host "Windows Defender Service is not running" -ForegroundColor Green
 }
 
 Write-Host ""
