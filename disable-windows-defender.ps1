@@ -3,18 +3,12 @@
     ## IMPORTANT!! ##
     #################
    
-    ### ONLY FOR WINDOWS 11 ###
+    ######
     1. Boot in Safe Mode
     2. Disable Windows Update
     3. Run powershell as admin
     4. Set-ExecutionPolicy RemoteSigned
     5. Place script in C:\ and run it
-    
-    Windows 11: 
-    C:\Program Files\Windows Defender - TrustedInstaller
-    C:\ProgramData\Microsoft\Windows Defender - SYSTEM
-    C:\Windows\system32\MpCmdRun.exe - TrustedInstaller
-    C:\Windows\SysWOW64\MpCmdRun.exe - TrustedInstaller
 
     Windows 10:
     C:\Program Files\Windows Defender - This folder contains the executables and other files for Windows Defender.
