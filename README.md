@@ -13,7 +13,7 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 - [x] Disable UAC
 - [x] Disable list of Windows Defender engines
 - [x] Set default actions to NoAction
-- [x] Try to delete Windows Defender Files and Drivers
+- [x] Try to delete Windows Defender drivers
 - [x] Delete Windows Defender services and drivers from registry
 
 ## Features that are not working [currently]
