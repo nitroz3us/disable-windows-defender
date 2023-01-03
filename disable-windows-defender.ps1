@@ -112,13 +112,13 @@ Write-Host "Deleting Windows Defender (files, services, drivers)" -ForegroundCol
 # Define the paths to the folders to be deleted
 if (Test-Path "C:\Windows\System32\drivers\wd\") {
     # If the folder exists, output a message indicating that it was not deleted
-    Write-Output "The C:\Windows\System32\drivers\wd\ is not deleted." -ForegroundColor Yellow
-    Write-Output "The C:\Windows\System32\drivers\wd\ will be deleting." -ForegroundColor Yellow
+    Write-Host "The C:\Windows\System32\drivers\wd\ is not deleted." -ForegroundColor Yellow
+    Write-Host "The C:\Windows\System32\drivers\wd\ will be deleting." -ForegroundColor Yellow
     Remove-Item "C:\Windows\System32\drivers\wd\" -Recurse -Force
 }
 else {
     # If the folder does not exist, output a message indicating that it was deleted
-    Write-Output "The C:\Windows\System32\drivers\wd\ has already been deleted." -ForegroundColor Green
+    Write-Host "The C:\Windows\System32\drivers\wd\ has already been deleted." -ForegroundColor Green
 }
 
 # Delete Windows Defender services from registry (HKLM)
