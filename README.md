@@ -15,12 +15,12 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 - [x] Set default actions to NoAction
 - [x] Try to delete Windows Defender drivers
 - [x] Delete Windows Defender services and drivers from registry
+- [x] Disable Windows Update
 
 ## Features that are not working [currently]
 - [ ] Delete Windows Defender folders & files
 
 ## Extra features [not done]
-- [ ] Disable Windows Update
 - [ ] Disable Windows License Manager Service
 - [ ] Elevate to NT AUTHORITY\SYSTEM for both Windows 10/11
     - [ ] Download psexec
