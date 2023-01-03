@@ -10,7 +10,7 @@
     4. Set-ExecutionPolicy RemoteSigned
     5. Place script in C:\ and run it
 
-    Windows 10:
+    Windows 10/11:
     C:\Program Files\Windows Defender - This folder contains the executables and other files for Windows Defender.
     C:\ProgramData\Microsoft\Windows Defender - This folder contains data and configuration files for Windows Defender
     C:\Windows\System32\drivers\wd\ - This folder contains the Windows Defender driver files.
@@ -134,7 +134,7 @@ foreach($svc in $service_list) {
 $driver_list = @("WdnisDrv", "wdboot", "wdfilter")
 foreach($drv in $driver_list) {
     if($("HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
-        if( $(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
+        if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4) {
             Write-Host "$drv driver has already been disabled" -ForegroundColor Green
         } else {
             Write-Host "$drv driver has been disabled (Please REBOOT)" -ForegroundColor Green
