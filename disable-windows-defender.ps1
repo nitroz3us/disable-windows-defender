@@ -126,8 +126,7 @@ else {
 # Delete Windows Defender services from registry (HKLM)
 $service_list = @( "WdNisSvc" , "WinDefend")
 foreach($svc in $service_list) {
-    if($("
-    \$svc")) {
+    if($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
         if($(Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4) {
             Write-Host "$svc service has already been deleted" -ForegroundColor Green
         } else {
