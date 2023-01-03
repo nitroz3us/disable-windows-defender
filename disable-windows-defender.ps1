@@ -27,7 +27,7 @@
     $drive_letters = [char]$_
     Add-MpPreference -ExclusionPath "$($drive_letters):\" -ErrorAction SilentlyContinue
     Add-MpPreference -ExclusionProcess "$($drive_letters):\*" -ErrorAction SilentlyContinue
-
+}
 
 Write-Host "Checking if user is booted in Safe Mode." -ForegroundColor Yellow
 $bootupState = (Get-WmiObject -Class Win32_ComputerSystem | Select-Object -ExpandProperty BootupState).ToLower()
@@ -108,9 +108,7 @@ if (Test-Path $registryPath) {
     Write-Host "Windows Defender is already disabled." -ForegroundColor Green
 }
 
-### WORK ON THIS ###
 Write-Host "Deleting Windows Defender (files, services, drivers)" -ForegroundColor Yellow
-# Write-Host ""
 # Define the paths to the folders to be deleted
 if (Test-Path "C:\Windows\System32\drivers\wd\") {
     # If the folder exists, output a message indicating that it was not deleted
@@ -152,6 +150,35 @@ foreach($drv in $driver_list) {
         Write-Host "$drv driver has already been disabled" -ForegroundColor Green
     }
 }
+
+# Disable Windows Update Service
+Write-Host "Disabling Windows Update Service" -ForegroundColor Yellow
+# Get the Windows Update service
+$wuauserv = Get-Service -Name "wuauserv"
+# Stop the service
+Stop-Service $wuauserv
+# Set the service startup type to disabled
+Set-Service -Name "wuauserv" -StartupType Disabled
+# Confirm that the service has been disabled
+$wuauserv | Select-Object -Property Name, StartupType, Status
+if ($wuauserv.StartType -eq "Disabled" -and $wuauserv.Status -eq "Stopped") {
+    Write-Host "Windows Update has been disabled." -ForegroundColor Green
+}
+else {
+    Write-Host "Windows Update has not been disabled." -ForegroundColor Red
+}
+
+# Set the Windows Update service to disabled via Registry
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\wuauserv" -Name "Start" -Value 4
+# Confirm the change by reading the Start value via Registry
+$startValue = (Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\wuauserv").Start
+if ($startValue -eq 4) {
+    Write-Host "The Windows Update service has been disabled." -ForegroundColor Green
+}
+else {
+    Write-Host "The Windows Update service has not been disabled. Please check the registry." -ForegroundColor Yellow
+}
+
 
 # Check list of service running or not
 Write-Host "Check disabled engines (Get-MpPreference)" -ForegroundColor Yellow
