@@ -9,7 +9,7 @@ Decided on making a script where the user run once and it's done.
 
 Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 
-Due to the nature of this script, I made sure that the script checks if you are running in a Virtual Machine (VM). Please do not run this on your Host machine
+Due to the nature of this script, I made sure that the script checks if you are running in a Virtual Machine (VM). **Please do not run this on your Host machine**
 ## What happens under the hood
 - [x] Check if User is in a Virtual Machine (VM)
 - [x] Add exception for all drive letters
