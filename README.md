@@ -52,9 +52,9 @@ Due to the nature of this script, I made sure that the script checks if you are 
 <img src="https://github.com/nitroz3us/disable-windows-defender/blob/main/img/win_defendera_stopped.jpeg" width="70%" /> 
 
 ## Operating System
-Windows 11
+Windows 10 (Currently testing)
 
-Windows 10
+Windows 11 (Not tested)
 ## References
 https://soji256.medium.com/how-to-permanently-disable-microsoft-defender-antivirus-on-windows-10-fdfdce9b5fb2
 
