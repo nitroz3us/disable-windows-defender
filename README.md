@@ -13,7 +13,8 @@ Due to the nature of this script, I made sure that the script checks if you are 
 
 **Please do not run this on your Host machine**
 ## What happens under the hood
-- [x] Check if User is in a Virtual Machine (VM)
+- [x] Checks if User is in a Virtual Machine (VM)
+- [x] Checks if User is booted in Safe Mode
 - [x] Add exception for all drive letters
 - [x] Disable UAC
 - [x] Disable list of Windows Defender engines
