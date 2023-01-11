@@ -16,6 +16,22 @@
     C:\Windows\System32\drivers\wd\ - This folder contains the Windows Defender driver files.
 #>
 
+# Check if user is in Virtual Machine, if not exit
+$check_vm = $false
+Write-Host "Checking if user is in Virtual Machine." -ForegroundColor Yellow
+# Get the computer's model
+$computerModel = (Get-WmiObject -Class Win32_ComputerSystem).Model
+# Check if the model includes the substring "virtual"
+if ($computerModel -like "*virtual*") {
+    Write-Host "This machine is a virtual machine. Will continue." -ForegroundColor Green
+    $check_vm = $true  
+} else {
+    Write-Host "This machine is not a virtual machine. Will exit NOW." -ForegroundColor Red
+    Write-Host "[!] Please USE A VIRTUAL MACHINE." -ForegroundColor Red
+    exit
+}
+
+
 # Adding exception for all drive letters (C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)
 67..90 | foreach-object{
     $drive_letters = [char]$_
