@@ -8,7 +8,13 @@ Feel free to edit the script to your own needs.
 Decided on making a script where the user run once and it's done.
 
 Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
+
+Due to the nature of this script, I made sure that the script checks if you are running in a Virtual Machine (VM). 
+
+**Please do not run this on your Host machine**
 ## What happens under the hood
+- [x] Checks if User is in a Virtual Machine (VM)
+- [x] Checks if User is booted in Safe Mode
 - [x] Add exception for all drive letters
 - [x] Disable UAC
 - [x] Disable list of Windows Defender engines
@@ -46,9 +52,9 @@ Complements well with [Flare-VM](https://github.com/mandiant/flare-vm)
 <img src="https://github.com/nitroz3us/disable-windows-defender/blob/main/img/win_defendera_stopped.jpeg" width="70%" /> 
 
 ## Operating System
-Windows 11
+Windows 10 (Currently testing)
 
-Windows 10
+Windows 11 (Not tested)
 ## References
 https://soji256.medium.com/how-to-permanently-disable-microsoft-defender-antivirus-on-windows-10-fdfdce9b5fb2
 
