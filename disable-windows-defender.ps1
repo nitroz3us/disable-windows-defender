@@ -248,5 +248,6 @@ if ($CheckSystem) {
     }
     Write-Host ""
     Write-Host "Please REBOOT your system to after completing the whole process. Thank you." -ForegroundColor Green
+    Write-Host ""
     Read-Host -Prompt "Press Enter to close the terminal"
 }
