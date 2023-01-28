@@ -35,16 +35,15 @@ Due to the nature of this script, I made sure that the script checks if you are 
 
 
 ## Windows 10/11 Instructions
-1. Boot in **Safe Mode** [IMPORTANT!]
-2. Run PowerShell as Administrator.
-3. Set Execution Policy to RemoteSigned (give permission).
+1. Run PowerShell as Administrator.
+2. Set Execution Policy to RemoteSigned (give permission).
 
     ```shell
     Set-ExecutionPolicy RemoteSigned
     ```
 
-4. Place script in ```C:\``` Drive and run it.
-5. Restart your OS.
+3. Place script in ```C:\``` Drive and run it.
+4. Restart your OS.
 
 <img src="https://github.com/nitroz3us/disable-windows-defender/blob/main/img/win_defendera_stopped.jpeg" width="70%" /> 
 
