@@ -65,5 +65,3 @@ https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/comma
 https://www.sciencedirect.com/topics/computer-science/execution-policy
 
 https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference?view=windowsserver2022-ps
-
-https://blog.nirsoft.net/2020/02/25/run-program-as-trustedinstaller/
