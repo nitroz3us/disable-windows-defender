@@ -21,7 +21,7 @@ Due to the nature of this script, I made sure that the script checks if you are 
 - [x] Set default actions to NoAction
 - [x] Delete Windows Defender drivers' files
 - [x] Delete Windows Defender services and drivers from registry
-- [ ] Delete Windows Defender folders & files
+- [x] Delete Windows Defender folders & files
 - [x] Disable Windows Update
 
 ## Extra features
