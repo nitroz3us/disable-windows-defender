@@ -25,11 +25,10 @@ Due to the nature of this script, I made sure that the script checks if you are 
 - [x] Disable Windows Update
 
 ## Extra features
-- [ ] Elevate to Administrator
-- [ ] Disable Windows License Manager Service
-- [ ] Elevate to NT AUTHORITY\SYSTEM & TrustedInstaller for both Windows 10/11
-    - [ ] Download NirSoft
-    - [ ] Elevate to NT AUTHORITY\SYSTEM or TrustedInstaller
+- [x] Elevate to Administrator
+- [x] Disable Windows License Manager Service
+- [x] Elevate to NT AUTHORITY\SYSTEM & TrustedInstaller for both Windows 10/11
+    - [x] Elevate to NT AUTHORITY\SYSTEM or TrustedInstaller
 
 ## Future projects (Done)
 - [x] Be able to disable Windows Defender without having to boot into Safe Mode
