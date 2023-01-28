@@ -31,8 +31,8 @@ Due to the nature of this script, I made sure that the script checks if you are 
     - [ ] Download NirSoft
     - [ ] Elevate to NT AUTHORITY\SYSTEM or TrustedInstaller
 
-## Future projects (?)
-- [ ] Be able to disable Windows Defender without having to boot into Safe Mode
+## Future projects (Done)
+- [x] Be able to disable Windows Defender without having to boot into Safe Mode
 
 
 ## Windows 10/11 Instructions
