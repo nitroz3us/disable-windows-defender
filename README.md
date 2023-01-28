@@ -14,19 +14,17 @@ Due to the nature of this script, I made sure that the script checks if you are 
 **Please do not run this on your Host machine**
 ## What happens under the hood
 - [x] Checks if User is in a Virtual Machine (VM)
-- [x] Checks if User is booted in Safe Mode
+- [x] ~Checks if User is booted in Safe Mode~
 - [x] Add exception for all drive letters
 - [x] Disable UAC
 - [x] Disable list of Windows Defender engines
 - [x] Set default actions to NoAction
 - [x] Delete Windows Defender drivers' files
 - [x] Delete Windows Defender services and drivers from registry
+- [ ] Delete Windows Defender folders & files
 - [x] Disable Windows Update
 
-## Features that are not working [currently]
-- [ ] Delete Windows Defender folders & files
-
-## Extra features [not done]
+## Extra features
 - [ ] Elevate to Administrator
 - [ ] Disable Windows License Manager Service
 - [ ] Elevate to NT AUTHORITY\SYSTEM & TrustedInstaller for both Windows 10/11
